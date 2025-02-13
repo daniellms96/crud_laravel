@@ -30,15 +30,28 @@
             margin: 0 5px;
             text-decoration: none;
         }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
     <h1>Listado de Alumnos</h1>
 
-    <!-- Botón para crear un nuevo alumno -->
-    <form action="{{ url('alumnos/create') }}" method="get">
-        <button type="submit">Registrar Alumno</button>
-    </form>
+    <div class="button-container">
+        <!-- Botón para crear un nuevo alumno -->
+        <form action="{{ url('alumnos/create') }}" method="get">
+            <button type="submit">Registrar Alumno</button>
+        </form>
+        
+        <!-- Botón para filtrar alumnos por fecha -->
+        <form action="{{ url('/edad') }}" method="get">
+            <button type="submit">Filtrar alumnos por fecha</button>
+        </form>
+    </div>
 
     <table>
         <thead>
@@ -64,10 +77,9 @@
                     <td>{{ $alumno->email }}</td>
                     <td>{{ $alumno->nivel->nombre ?? 'Sin nivel' }}</td>
                     <td>
-
                         <!-- Formulario para ver -->
                         <form action="{{ url('alumnos/' . $alumno->id) }}" method="get">
-                                <button type="submit">Ver</button>
+                            <button type="submit">Ver</button>
                         </form>
                         
                         <!-- Formulario para editar -->

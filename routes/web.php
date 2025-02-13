@@ -8,6 +8,10 @@ use App\Http\Controllers\AlumnoController; //Se importa el controlador AlumnoCon
 Route::resource('/alumnos', AlumnoController::class);
 
 //Se define la ruta para mostrar la lista de alumnos.
+//Estas rutas van por encima, sino da problema con el método show.
+Route::get('/edad', [AlumnoController::class, 'edad']);
+Route::post('/resultado', [AlumnoController::class, 'resultado']);
+
 Route::get('alumnos/create', [AlumnoController::class, 'create']);
 Route::get('alumnos', [AlumnoController::class, 'index']);
 Route::get('/{alumno}', [AlumnoController::class, 'show']);
@@ -15,3 +19,4 @@ Route::post('alumnos', [AlumnoController::class, 'store']);
 Route::get('alumnos/{id}/edit', [AlumnoController::class, 'edit']);
 Route::put('alumnos/{id}', [AlumnoController::class, 'update']);
 Route::delete('alumnos/{id}', [AlumnoController::class, 'destroy']);
+

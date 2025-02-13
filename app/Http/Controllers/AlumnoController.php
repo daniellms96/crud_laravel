@@ -6,8 +6,7 @@ use App\Models\Alumno;
 use App\Models\Nivel;
 use Illuminate\Http\Request;
 
-class AlumnoController extends Controller
-{
+class AlumnoController extends Controller {
     //Muestra la lista de alumnos.
     public function index() {
         $alumnos = Alumno::all(); // Obtener todos los alumnos de la base de datos.
@@ -17,9 +16,14 @@ class AlumnoController extends Controller
     //Muestra un alumno específico.
     public function show($id) {
         $alumno = Alumno::find($id);
-
-        return view('alumnos.show', ['alumno' => $alumno]);
+    
+        if (!$alumno) {
+            abort(404, 'Alumno no encontrado');
+        }
+    
+        return view('alumnos.show', compact('alumno'));
     }
+    
 
     //Muestra el formulario para crear un nuevo alumno.
     public function create() {
@@ -46,8 +50,6 @@ class AlumnoController extends Controller
         return redirect('/alumnos');
     }
     
-
-    
     //Muestra el formulario para editar un alumno específico.
     public function edit($id) {
         // Obtener el alumno por su ID
@@ -56,7 +58,7 @@ class AlumnoController extends Controller
         // Obtener todos los niveles
         $niveles = Nivel::all();
         
-        // Pasar el alumno y los niveles a la vista sin usar compact
+        // Pasar el alumno y los niveles a la vista.
         return view('alumnos.edit', ['alumno' => $alumno, 'niveles' => $niveles]);
     }
 
@@ -92,4 +94,23 @@ class AlumnoController extends Controller
             return redirect('/alumnos');
         }
     }
+
+    // Método para mostrar el formulario para ingresar el año de nacimiento.
+    public function edad() {
+    $alumnos = Alumno::all(); // Obtiene todos los alumnos.
+        return view('alumnos.edad', compact('alumnos'));
+    }
+
+
+    // Método para procesar el formulario y mostrar los alumnos nacidos en el año ingresado.
+    public function resultado(Request $request) {
+        $request->validate(['anio' => 'required|integer|min:1900|max:' . date('Y'), ]);
+
+        $anio = $request->input('anio');
+        $alumnos = Alumno::whereYear('fecha_nacimiento', $anio)->get();
+
+        return view('alumnos.resultado', compact('alumnos', 'anio'));
+    }
+
+    
 }

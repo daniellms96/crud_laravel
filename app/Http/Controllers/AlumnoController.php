@@ -9,8 +9,8 @@ use Illuminate\Http\Request;
 class AlumnoController extends Controller {
     //Muestra la lista de alumnos.
     public function index() {
-        $alumnos = Alumno::all(); // Obtener todos los alumnos de la base de datos.
-        return view('alumnos.index', ['lista' => $alumnos]);
+        $lista = Alumno::paginate(15);
+        return view('alumnos.index', compact('lista'));
     }
 
     //Muestra un alumno específico.

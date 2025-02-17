@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alumnos</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
             display: flex;
@@ -41,62 +42,77 @@
 <body>
     <h1>Listado de Alumnos</h1>
 
-    <div class="button-container">
+    <div class="my-3"></div> <!-- Espacio para separar elementos-->
+
+        <div class="button-container">
         <!-- Botón para crear un nuevo alumno -->
         <form action="{{ url('alumnos/create') }}" method="get">
-            <button type="submit">Registrar Alumno</button>
+            <button type="submit" class="btn btn-success">Registrar Alumno</button>
         </form>
         
         <!-- Botón para filtrar alumnos por fecha -->
         <form action="{{ url('/edad') }}" method="get">
-            <button type="submit">Filtrar alumnos por fecha</button>
+            <button type="submit" class="btn btn-success">Filtrar alumnos por fecha</button>
         </form>
-    </div>
+        </div>
 
     <table>
-        <thead>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Matrícula</th>
+            <th>Nombre</th>
+            <th>Fecha de Nacimiento</th>
+            <th>Teléfono</th>
+            <th>Email</th>
+            <th>Nivel</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @forelse ($lista as $item)
             <tr>
-                <th>ID</th>
-                <th>Matrícula</th>
-                <th>Nombre</th>
-                <th>Fecha de Nacimiento</th>
-                <th>Teléfono</th>
-                <th>Email</th>
-                <th>Nivel</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($lista as $alumno)
-                <tr>
-                    <td>{{ $alumno->id }}</td>
-                    <td>{{ $alumno->matricula }}</td>
-                    <td>{{ $alumno->nombre }}</td>
-                    <td>{{ $alumno->fecha_nacimiento }}</td>
-                    <td>{{ $alumno->telefono }}</td>
-                    <td>{{ $alumno->email }}</td>
-                    <td>{{ $alumno->nivel->nombre ?? 'Sin nivel' }}</td>
-                    <td>
-                        <!-- Formulario para ver -->
-                        <form action="{{ url('alumnos/' . $alumno->id) }}" method="get">
-                            <button type="submit">Ver</button>
-                        </form>
-                        
-                        <!-- Formulario para editar -->
-                        <form action="{{ url('alumnos/' . $alumno->id . '/edit') }}" method="get">
-                            <button type="submit">Editar</button>
-                        </form>
+                <td>{{ $item->id }}</td>
+                <td>{{ $item->matricula }}</td>
+                <td>{{ $item->nombre }}</td>
+                <td>{{ $item->fecha_nacimiento }}</td>
+                <td>{{ $item->telefono }}</td>
+                <td>{{ $item->email }}</td>
+                <td>{{ $item->nivel->nombre ?? 'Sin nivel' }}</td>
+                <td>
+    <!-- Formulario para ver -->
+    <form action="{{ url('alumnos/' . $item->id) }}" method="get">
+        <button type="submit" class="btn btn-warning">Ver</button>
+    </form>
+    
+    <!-- Formulario para editar -->
+    <form action="{{ url('alumnos/' . $item->id . '/edit') }}" method="get">
+        <button type="submit" class="btn btn-primary">Editar</button>
+    </form>
 
-                        <!-- Formulario de eliminar -->
-                        <form action="{{ url('alumnos/' . $alumno->id) }}" method="post">
-                            @method('DELETE')
-                            @csrf
-                            <button type="submit">Eliminar</button>
-                        </form>
-                    </td>
+    <!-- Formulario de eliminar -->
+    <form action="{{ url('alumnos/' . $item->id) }}" method="post">
+        @method('DELETE')
+        @csrf
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+    </form>
+    </td>
+
                 </tr>
-            @endforeach
+            @empty
+                <tr>
+                    <td colspan="8">No hay alumnos registrados</td>
+                </tr>
+            @endforelse
         </tbody>
-    </table>
+</table>
+
+<div class="my-3"></div> <!-- Espacio para separar elementos-->
+
+<div class="d-flex justify-content-end">
+    {{ $lista->links() }}
+</div>
+
+
 </body>
 </html>
